@@ -1,0 +1,16 @@
+@import url(resetTemplate.css);
+
+body {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+#sidebar {
+    width: 300px;
+    background-color: grey;
+    flex-shrink: 0;
+}
+#main {
+    background-color: lavender;
+    flex: 1;
+}
