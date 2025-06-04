@@ -1,5 +1,5 @@
 import "./style.css";
-import { display } from "./display.js";
+import { updateDisplay } from "./display.js";
 import { Project } from "./project.js";
 import { Todo } from "./todo.js";
 
@@ -22,7 +22,7 @@ projectMap.set("inbox", inbox_project);
 //placeholder data including default project inbox
 const test_todo = new Todo("test", "desc", "1");
 inbox_project.addTodoToProject(test_todo);
-display(inbox_project);
+updateDisplay(inbox_project);
 //New Todo button event listener
 const dialog = document.getElementById("newTodoDialog");
 const newTodo = document.getElementById("newTodoBtn");
@@ -61,6 +61,7 @@ confirmNewTodo.addEventListener("click", (event) => {
     );
     projectMap.get(newTodoProject.value).addTodoToProject(todo);
     //update ui
+    display(projectMap.get(newTodoProject.value));
     newTodoDialog.close();
   } else {
     alert("Please fill in all fields");
