@@ -18,6 +18,7 @@ function getData() {
 //init data
 const inbox_project = new Project("inbox");
 const projectMap = new Map();
+const todoMap = new Map();
 projectMap.set("inbox", inbox_project);
 //placeholder data including default project inbox
 const test_todo = new Todo("test", "desc", "1");
@@ -37,7 +38,7 @@ newTodo.addEventListener("click", () => {
 });
 //Create new todo from dialog
 const newTodoDialog = document.getElementById("newTodoDialog");
-const newTodoName = newTodoDialog.querySelector("#name");
+const newTodoTitle = newTodoDialog.querySelector("#todoTitle");
 const newTodoDescription = newTodoDialog.querySelector("#description");
 const newTodoPriority = newTodoDialog.querySelector("#priority");
 const newTodoDueDate = newTodoDialog.querySelector("#dueDate");
@@ -54,14 +55,14 @@ confirmNewTodo.addEventListener("click", (event) => {
   });
   if (valid) {
     const todo = new Todo(
-      newTodoName.value,
+      newTodoTitle.value,
       newTodoDescription.value,
       newTodoPriority.value,
       newTodoDueDate.value
     );
     projectMap.get(newTodoProject.value).addTodoToProject(todo);
     //update ui
-    display(projectMap.get(newTodoProject.value));
+    updateDisplay(projectMap.get(newTodoProject.value));
     newTodoDialog.close();
   } else {
     alert("Please fill in all fields");
@@ -72,4 +73,23 @@ const cancel = newTodoDialog.querySelector("#cancel");
 cancel.addEventListener("click", (event) => {
   event.preventDefault();
   newTodoDialog.close();
+});
+//generate project buttons'
+function generateProjectButtons() {
+  projectMap.keys().forEach((project) => {
+    const projectBtn = document.createElement("button");
+    projectBtn.textContent = project;
+    projectBtn.id = project;
+    document.querySelector("#sidebar li").appendChild(projectBtn);
+    projectBtn.addEventListener("click", () => {
+      updateDisplay(projectMap.get(project));
+    });
+  });
+}
+//New project button
+const newProjectBtn = document.getElementById("newProjectBtn");
+newProjectBtn.addEventListener("click", () => {
+  const projectName = prompt("Enter project name");
+  projectMap.set(projectName, new Project(projectName));
+  generateProjectButtons();
 });
