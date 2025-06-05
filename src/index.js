@@ -1,6 +1,6 @@
 import "./style.css";
 import { initData, getProjectMap} from "./dataManager.js";
-import { updateDisplay } from "./display.js";
+import { updateDisplay, updateSidebar} from "./display.js";
 import { Project } from "./Project.js";
 import { Todo } from "./Todo.js";
 
@@ -71,24 +71,11 @@ function setupCancelTodoEvent() {
     newTodoDialog.close();
   });
 }
-//Generate project buttons in sidebar. Should this be moved out?
-function generateProjectButtons() {
-  const projectsList = document.querySelector("#sidebar ul");
-  projectsList.innerHTML = "";
-  getProjectMap().keys().forEach((project) => {
-    const projectBtn = document.createElement("button");
-    projectBtn.textContent = project;
-    projectBtn.id = project;
-    projectsList.appendChild(projectBtn);
-    projectBtn.addEventListener("click", () => {
-      updateDisplay(getProjectMap().get(project));
-    });
-  });
-}
 //main
 function initApp() {
   initData();
-  generateProjectButtons();
+  updateSidebar(getProjectMap());
+  updateDisplay(getProjectMap().get("inbox"));
   setupNewProjectDialog();
   setupNewTodoDialog();
   setupCreateTodoEvent();
