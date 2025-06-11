@@ -1,10 +1,6 @@
 import "./style.css";
-import { initData, getProjectMap} from "./dataManager.js";
+import { addNewProject, addNewTodo, getData, getProjectMap} from "./dataManager.js";
 import { updateDisplay, updateSidebar} from "./display.js";
-import { Project } from "./Project.js";
-import { Todo } from "./Todo.js";
-
-
 
 //New Todo button
 function setupNewTodoDialog() {
@@ -25,7 +21,7 @@ function setupNewProjectDialog() {
   const newProjectBtn = document.getElementById("newProjectBtn");
   newProjectBtn.addEventListener("click", () => {
     const projectName = prompt("Enter project name");
-    getProjectMap().set(projectName, new Project(projectName));
+    addNewProject(projectName);
     generateProjectButtons();
   });
 }
@@ -48,13 +44,7 @@ function setupCreateTodoEvent() {
       }
     });
     if (valid) {
-      const todo = new Todo(
-        newTodoTitle.value,
-        newTodoDescription.value,
-        newTodoPriority.value,
-        newTodoDueDate.value
-      );
-      getProjectMap().get(newTodoProject.value).addTodoToProject(todo);
+      addNewTodo(newTodoProject.value, newTodoTitle.value, newTodoDescription.value, newTodoPriority.value, newTodoDueDate.value);
       //update ui
       updateDisplay(getProjectMap().get(newTodoProject.value));
       newTodoDialog.close();
@@ -73,7 +63,7 @@ function setupCancelTodoEvent() {
 }
 //main
 function initApp() {
-  initData();
+  getData();
   updateSidebar(getProjectMap());
   updateDisplay(getProjectMap().get("inbox"));
   setupNewProjectDialog();
