@@ -22,7 +22,7 @@ function setupNewProjectDialog() {
   newProjectBtn.addEventListener("click", () => {
     const projectName = prompt("Enter project name");
     addNewProject(projectName);
-    generateProjectButtons();
+    //generateProjectButtons();
   });
 }
 //New Todo creation

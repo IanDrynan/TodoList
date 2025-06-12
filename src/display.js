@@ -1,26 +1,28 @@
 function updateDisplay(project) {
   const display = document.querySelector("#display");
   display.innerHTML = "";
+
+  const projectName = document.createElement("h1");
+  projectName.textContent = project.name;
+  display.append(projectName);
+
   project.todos.forEach((todo) => {
-    const todoDiv = document.createElement("div");
-    const projectName = document.createElement("h2");
-    const todoTitle = document.createElement("h3");
+    const todoTitle = document.createElement("h2");
     const todoDescription = document.createElement("p");
     const todoPriority = document.createElement("p");
     const todoDueDate = document.createElement("p");
-    projectName.textContent = project.name;
+
     todoTitle.textContent = todo.title;
     todoDescription.textContent = todo.description;
     todoPriority.textContent = todo.priority;
     todoDueDate.textContent = todo.dueDate;
-    display.append(todoDiv);
-    todoDiv.append(projectName);
-    todoDiv.append(todoTitle);
-    todoDiv.append(todoDescription);
-    todoDiv.append(todoPriority);
-    todoDiv.append(todoDueDate);
+
+    display.append(todoTitle);
+    display.append(todoDescription);
+    display.append(todoPriority);
+    display.append(todoDueDate);
   });
-};
+}
 function updateSidebar(projectMap) {
   const projectsList = document.querySelector("#sidebar ul");
   projectsList.innerHTML = "";
