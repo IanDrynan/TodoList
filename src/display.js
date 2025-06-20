@@ -7,20 +7,16 @@ function updateDisplay(project) {
   display.append(projectName);
 
   project.todos.forEach((todo) => {
+    const todoDiv = document.createElement("div");
     const todoTitle = document.createElement("h2");
-    const todoDescription = document.createElement("p");
-    const todoPriority = document.createElement("p");
     const todoDueDate = document.createElement("p");
-
     todoTitle.textContent = todo.title;
-    todoDescription.textContent = todo.description;
-    todoPriority.textContent = todo.priority;
-    todoDueDate.textContent = todo.dueDate;
+    const tempDate = new Date(todo.dueDate).toDateString();
+    todoDueDate.textContent = tempDate !== "Invalid Date" ? tempDate : "";
 
-    display.append(todoTitle);
-    display.append(todoDescription);
-    display.append(todoPriority);
-    display.append(todoDueDate);
+    display.append(todoDiv);
+    todoDiv.append(todoTitle);
+    todoDiv.append(todoDueDate);
   });
 }
 function updateSidebar(projectMap) {
