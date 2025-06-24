@@ -72,6 +72,19 @@ function setupCancelTodoEvent() {
     newTodoDialog.close();
   });
 }
+function setupTodoCollapsibleEvent() {
+  const display = document.querySelector("#display");
+  display.addEventListener("click", (event) => {
+    if(event.target.classList.contains('collapsible')) {
+      const content = event.target.nextElementSibling;
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    }
+  });
+}
 //main
 function initApp() {
   getData();
@@ -81,5 +94,13 @@ function initApp() {
   setupNewTodoDialog();
   setupCreateTodoEvent();
   setupCancelTodoEvent();
+  setupTodoCollapsibleEvent();
 }
 document.addEventListener("DOMContentLoaded", initApp());
+
+//todo:
+//editable content fields
+//delete todo
+//project:
+//change http address
+//delete project

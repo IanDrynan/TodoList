@@ -3,8 +3,11 @@ function updateDisplay(project) {
   display.innerHTML = "";
 
   const projectName = document.createElement("h1");
+  projectName.setAttribute("contenteditable", "plaintext-only");
   projectName.textContent = project.name;
   display.append(projectName);
+
+
 
   project.todos.forEach((todo) => {
     const todoDiv = document.createElement("div");
@@ -22,14 +25,6 @@ function updateDisplay(project) {
     todoDiv.append(todoTitle);
     todoDiv.append(newTodoDescription);
     todoDiv.append(todoDueDate);
-
-    todoTitle.addEventListener("click", () => {
-      if (newTodoDescription.style.maxHeight) {
-        newTodoDescription.style.maxHeight = null;
-      } else {
-        newTodoDescription.style.maxHeight = newTodoDescription.scrollHeight + "px";
-      }
-    })
   });
 }
 function updateSidebar(projectMap) {
