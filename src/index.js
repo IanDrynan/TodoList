@@ -1,6 +1,11 @@
 import "./style.css";
-import { addNewProject, addNewTodo, getData, getProjectMap} from "./dataManager.js";
-import { updateDisplay, updateSidebar} from "./display.js";
+import {
+  addNewProject,
+  addNewTodo,
+  getData,
+  getProjectMap,
+} from "./dataManager.js";
+import { updateDisplay, updateSidebar } from "./display.js";
 
 //New Todo button
 function setupNewTodoDialog() {
@@ -33,7 +38,7 @@ function setupCreateTodoEvent() {
   const newTodoPriority = newTodoDialog.querySelector("#priority");
   const newTodoDueDate = newTodoDialog.querySelector("#dueDate");
   const newTodoProject = newTodoDialog.querySelector("#selectProject");
-  const confirmNewTodo = newTodoDialog.querySelector("#confirmNewTodo");
+  const confirmNewTodo = newTodoDialog.querySelector("#todoFormSubmit");
   confirmNewTodo.addEventListener("click", (event) => {
     event.preventDefault();
     const requiredFields = newTodoDialog.querySelectorAll("[required]");
@@ -44,7 +49,13 @@ function setupCreateTodoEvent() {
       }
     });
     if (valid) {
-      addNewTodo(newTodoProject.value, newTodoTitle.value, newTodoDescription.value, newTodoPriority.value, newTodoDueDate.value);
+      addNewTodo(
+        newTodoProject.value,
+        newTodoTitle.value,
+        newTodoDescription.value,
+        newTodoPriority.value,
+        newTodoDueDate.value
+      );
       //update ui
       updateDisplay(getProjectMap().get(newTodoProject.value));
       newTodoDialog.close();
@@ -55,7 +66,7 @@ function setupCreateTodoEvent() {
 }
 //Cancel new todo
 function setupCancelTodoEvent() {
-  const cancel = newTodoDialog.querySelector("#cancel");
+  const cancel = newTodoDialog.querySelector("#todoFormCancel");
   cancel.addEventListener("click", (event) => {
     event.preventDefault();
     newTodoDialog.close();

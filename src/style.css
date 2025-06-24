@@ -78,10 +78,43 @@ button {
 
     form {
         display: grid;
-        grid: "title"
-         "description"
-          "details details details details"
-          "submit submit submit";
+        grid:
+            "title title"
+            "description description"
+            "dueDate duedate"
+            "project priority"
+            "submit cancel"
+            ;
         gap: 1rem;
+
+        #todoFormTitle {
+            grid-area: title;
+        }
+        #todoFormDescription {
+            grid-area: description;
+        }
+        #todoFormDueDate {
+            grid-area: dueDate;
+        }
+        #todoFormPriority {
+            grid-area: priority;
+        }
+        #todoFormProject {
+            grid-area: project;
+        }
+        #todoFormSubmit {
+            grid-area: submit;
+        }
+        #todoFormCancel {
+            grid-area: cancel;
+        }
     }
+}
+.collapsible {
+    cursor:pointer;
+}
+.todoDescription {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
 }

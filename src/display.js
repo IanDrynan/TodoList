@@ -8,15 +8,28 @@ function updateDisplay(project) {
 
   project.todos.forEach((todo) => {
     const todoDiv = document.createElement("div");
+    todoDiv.className = "todo";
     const todoTitle = document.createElement("h2");
+    todoTitle.classList.add("collapsible");
+    const newTodoDescription = document.createElement("p");
+    newTodoDescription.className = "todoDescription";
+    newTodoDescription.textContent = todo.description;
     const todoDueDate = document.createElement("p");
     todoTitle.textContent = todo.title;
     const tempDate = new Date(todo.dueDate).toDateString();
     todoDueDate.textContent = tempDate !== "Invalid Date" ? tempDate : "";
-
     display.append(todoDiv);
     todoDiv.append(todoTitle);
+    todoDiv.append(newTodoDescription);
     todoDiv.append(todoDueDate);
+
+    todoTitle.addEventListener("click", () => {
+      if (newTodoDescription.style.maxHeight) {
+        newTodoDescription.style.maxHeight = null;
+      } else {
+        newTodoDescription.style.maxHeight = newTodoDescription.scrollHeight + "px";
+      }
+    })
   });
 }
 function updateSidebar(projectMap) {
