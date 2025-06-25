@@ -68,6 +68,9 @@ button {
         flex-direction: column;
         gap: 1rem;
     }
+    #mainBtns {
+        margin-top: auto;
+    }
 }
 
 #newTodoDialog {

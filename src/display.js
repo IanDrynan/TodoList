@@ -1,13 +1,15 @@
-function updateDisplay(project) {
+import { getCurrentProject, setCurrentProject, getProjectMap } from "./dataManager.js";
+
+function updateDisplay() {
+  const project = getCurrentProject();
+  const projectName = document.querySelector("#projectHeader");
+  if(project.name != "inbox") {
+    projectName.setAttribute("contenteditable", "plaintext-only");
+  }
+  projectName.textContent = project.name;
+
   const display = document.querySelector("#display");
   display.innerHTML = "";
-
-  const projectName = document.createElement("h1");
-  projectName.setAttribute("contenteditable", "plaintext-only");
-  projectName.textContent = project.name;
-  display.append(projectName);
-
-
 
   project.todos.forEach((todo) => {
     const todoDiv = document.createElement("div");
@@ -27,16 +29,18 @@ function updateDisplay(project) {
     todoDiv.append(todoDueDate);
   });
 }
-function updateSidebar(projectMap) {
+function updateSidebar() {
+  const projectMap = getProjectMap();
   const projectsList = document.querySelector("#sidebar ul");
   projectsList.innerHTML = "";
-  projectMap.keys().forEach((project) => {
+  projectMap.values().forEach((project) => {
     const projectBtn = document.createElement("button");
-    projectBtn.textContent = project;
-    projectBtn.id = project;
+    projectBtn.textContent = project.name;
+    projectBtn.setAttribute("data-project-id", project.id);
     projectsList.appendChild(projectBtn);
     projectBtn.addEventListener("click", () => {
-      updateDisplay(projectMap.get(project));
+      setCurrentProject(project);
+      updateDisplay();
     });
   });
 }

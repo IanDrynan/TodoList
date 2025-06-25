@@ -4,6 +4,8 @@ import {
   addNewTodo,
   getData,
   getProjectMap,
+  changeProjectName,
+  getCurrentProject,
 } from "./dataManager.js";
 import { updateDisplay, updateSidebar } from "./display.js";
 
@@ -12,10 +14,11 @@ function setupNewTodoDialog() {
   const dialog = document.getElementById("newTodoDialog");
   const newTodo = document.getElementById("newTodoBtn");
   newTodo.addEventListener("click", () => {
-    for (const project of getProjectMap().keys()) {
+    const projectMap = getProjectMap();
+    for (const project of projectMap.keys()) {
       const option = document.createElement("option");
       option.value = project;
-      option.textContent = project;
+      option.textContent = projectMap.get(project).name;
       dialog.querySelector("#selectProject").appendChild(option);
     }
     dialog.showModal();
@@ -27,7 +30,7 @@ function setupNewProjectDialog() {
   newProjectBtn.addEventListener("click", () => {
     const projectName = prompt("Enter project name");
     addNewProject(projectName);
-    //generateProjectButtons();
+    updateSidebar();
   });
 }
 //New Todo creation
@@ -57,7 +60,7 @@ function setupCreateTodoEvent() {
         newTodoDueDate.value
       );
       //update ui
-      updateDisplay(getProjectMap().get(newTodoProject.value));
+      updateDisplay();
       newTodoDialog.close();
     } else {
       alert("Please fill in all fields");
@@ -75,7 +78,7 @@ function setupCancelTodoEvent() {
 function setupTodoCollapsibleEvent() {
   const display = document.querySelector("#display");
   display.addEventListener("click", (event) => {
-    if(event.target.classList.contains('collapsible')) {
+    if (event.target.classList.contains("collapsible")) {
       const content = event.target.nextElementSibling;
       if (content.style.maxHeight) {
         content.style.maxHeight = null;
@@ -85,16 +88,31 @@ function setupTodoCollapsibleEvent() {
     }
   });
 }
+function setupEditableProject() {
+  const projectHeader = document.querySelector("#projectHeader");
+  projectHeader.addEventListener("blur", (event) => {
+    const newName = event.target.textContent.trim();
+    changeProjectName(getCurrentProject().id, newName);
+    updateSidebar();
+  });
+  projectHeader.addEventListener("keydown", (event) => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      event.target.blur();
+    }
+  });
+}
 //main
 function initApp() {
   getData();
-  updateSidebar(getProjectMap());
-  updateDisplay(getProjectMap().get("inbox"));
+  updateDisplay();
+  updateSidebar();
   setupNewProjectDialog();
   setupNewTodoDialog();
   setupCreateTodoEvent();
   setupCancelTodoEvent();
   setupTodoCollapsibleEvent();
+  setupEditableProject();
 }
 document.addEventListener("DOMContentLoaded", initApp());
 
