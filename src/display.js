@@ -14,8 +14,14 @@ function updateDisplay() {
   project.todos.forEach((todo) => {
     const todoDiv = document.createElement("div");
     todoDiv.className = "todo";
+    const todoHeaderDiv = document.createElement("div");
+    todoHeaderDiv.className = "todoHeaderDiv";
     const todoTitle = document.createElement("h2");
     todoTitle.classList.add("collapsible");
+    const todoEditButton = document.createElement("button");
+    todoEditButton.textContent = "Edit";
+    const todoDeleteButton = document.createElement("button");
+    todoDeleteButton.textContent = "Delete";
     const newTodoDescription = document.createElement("p");
     newTodoDescription.className = "todoDescription";
     newTodoDescription.textContent = todo.description;
@@ -24,7 +30,10 @@ function updateDisplay() {
     const tempDate = new Date(todo.dueDate).toDateString();
     todoDueDate.textContent = tempDate !== "Invalid Date" ? tempDate : "";
     display.append(todoDiv);
-    todoDiv.append(todoTitle);
+    todoDiv.append(todoHeaderDiv);
+    todoHeaderDiv.append(todoTitle);
+    todoHeaderDiv.append(todoEditButton);
+    todoHeaderDiv.append(todoDeleteButton);
     todoDiv.append(newTodoDescription);
     todoDiv.append(todoDueDate);
   });

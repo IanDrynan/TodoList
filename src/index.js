@@ -14,12 +14,14 @@ function setupNewTodoDialog() {
   const dialog = document.getElementById("newTodoDialog");
   const newTodo = document.getElementById("newTodoBtn");
   newTodo.addEventListener("click", () => {
+    const options = dialog.querySelector("#selectProject");
+    options.innerHTML = "";
     const projectMap = getProjectMap();
     for (const project of projectMap.keys()) {
       const option = document.createElement("option");
       option.value = project;
       option.textContent = projectMap.get(project).name;
-      dialog.querySelector("#selectProject").appendChild(option);
+      options.appendChild(option);
     }
     dialog.showModal();
   });
@@ -79,7 +81,7 @@ function setupTodoCollapsibleEvent() {
   const display = document.querySelector("#display");
   display.addEventListener("click", (event) => {
     if (event.target.classList.contains("collapsible")) {
-      const content = event.target.nextElementSibling;
+      const content = event.target.parentElement.nextElementSibling;
       if (content.style.maxHeight) {
         content.style.maxHeight = null;
       } else {
@@ -117,8 +119,9 @@ function initApp() {
 document.addEventListener("DOMContentLoaded", initApp());
 
 //todo:
-//editable content fields
+//edit details
 //delete todo
 //project:
+//create project same as todo
 //change http address
 //delete project
