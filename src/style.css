@@ -113,17 +113,15 @@ button {
         }
     }
 }
-.collapsible {
-    cursor:pointer;
-}
 .todoHeaderDiv {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     gap: 1rem;
 
-    .collapsible {
+    .todoTitle {
         margin-right: auto;
+        cursor:pointer;
     }
 }
 .todoDescription {

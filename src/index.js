@@ -80,12 +80,22 @@ function setupCancelTodoEvent() {
 function setupTodoCollapsibleEvent() {
   const display = document.querySelector("#display");
   display.addEventListener("click", (event) => {
-    if (event.target.classList.contains("collapsible")) {
-      const content = event.target.parentElement.nextElementSibling;
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
+    const actionElement = event.target.closest('[data-action]');
+    if (actionElement) {
+      const action = actionElement.dataset.action;
+      switch(action) {
+        case 'expand':
+          const content = event.target.nextElementSibling;
+          if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+          } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+          }
+          break;
+        case 'edit':
+          break;
+        case 'delete':
+          break;
       }
     }
   });

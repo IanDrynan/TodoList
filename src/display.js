@@ -16,12 +16,17 @@ function updateDisplay() {
     todoDiv.className = "todo";
     const todoHeaderDiv = document.createElement("div");
     todoHeaderDiv.className = "todoHeaderDiv";
+    todoHeaderDiv.setAttribute("data-action", "expand");
+    const todoToggle = document.createElement("input");
+    todoToggle.type = "checkbox";
     const todoTitle = document.createElement("h2");
-    todoTitle.classList.add("collapsible");
+    todoTitle.classList.add("todoTitle");
     const todoEditButton = document.createElement("button");
     todoEditButton.textContent = "Edit";
+    todoEditButton.setAttribute("data-action", "edit");
     const todoDeleteButton = document.createElement("button");
     todoDeleteButton.textContent = "Delete";
+    todoDeleteButton.setAttribute("data-action", "delete");
     const newTodoDescription = document.createElement("p");
     newTodoDescription.className = "todoDescription";
     newTodoDescription.textContent = todo.description;
