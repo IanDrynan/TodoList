@@ -30,7 +30,7 @@ body {
     margin: 0;
     padding: 0;
   }
-  button {
+  .projectButton {
     text-align: left;
 
     &::before {
@@ -38,6 +38,12 @@ body {
       margin-right: 1rem;
     }
   }
+  .projectDeleteButton {
+        margin: 0;
+        padding: 0;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
 }
 
 button {

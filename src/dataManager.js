@@ -6,8 +6,8 @@ let currentProject = ""; //object of current displayed project
 export function getCurrentProject() {
   return currentProject;
 }
-export function setCurrentProject(project) {
-  currentProject = project;
+export function setCurrentProject(projectID) {
+  currentProject = projectMap.get(projectID);
 }
 export function getProjectMap() {
   return projectMap;
@@ -48,7 +48,7 @@ export function getData() {
       }
     }
   }
-  setCurrentProject(projectMap.values().next().value);
+  setCurrentProjectToInbox();
 }
 function convertProjectMap(map) {
   const convertedProjectMap = Array.from(map.entries()).map(([projectID, projectObj]) => {
@@ -83,4 +83,14 @@ export function deleteTodo(projectID, todoID) {
 export function toggleTodoStatus(projectID, todoID) {
   projectMap.get(projectID).getTodoById(todoID).toggleStatus();
   saveData();
+}
+export function deleteProject(projectID) {
+  projectMap.delete(projectID);
+  saveData();
+}
+export function setCurrentProjectToInbox() {
+  currentProject = projectMap.values().next().value;
+}
+export function getInboxID() {
+  return projectMap.values().next().value.id;
 }

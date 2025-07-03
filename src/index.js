@@ -70,7 +70,29 @@ function setupCancelTodoEvent() {
     newTodoDialog.close();
   });
 }
-function setupClickEvents() {
+function setupClickEventsForSidebar() {
+  const sidebar = document.querySelector("#sidebar");
+  sidebar.addEventListener("click", (event) => {
+    const actionElement = event.target.closest("[data-action]");
+    if (actionElement) {
+      const action = actionElement.dataset.action;
+      const projectID = actionElement.closest("[data-project-id]").getAttribute("data-project-id");
+      switch (action) {
+        case "select-project":
+          dataManager.setCurrentProject(projectID);
+          updateDisplay();
+          break;
+        case "delete-project":
+          dataManager.deleteProject(projectID);
+          dataManager.setCurrentProjectToInbox();
+          updateSidebar();
+          updateDisplay();
+          break;
+      }
+    }
+  });
+}
+function setupClickEventsForDisplay() {
   const display = document.querySelector("#display");
   display.addEventListener("click", (event) => {
     if (
@@ -101,7 +123,7 @@ function setupClickEvents() {
     }
   });
 }
-function setupBlurEvents() {
+function setupBlurEventsForDisplay() {
   const projectHeader = document.querySelector("#projectHeader");
   projectHeader.addEventListener("blur", (event) => {
     const newName = event.target.textContent.trim();
@@ -115,7 +137,7 @@ function setupBlurEvents() {
     }
   });
 }
-function setupChangeEvents() {
+function setupChangeEventsForDisplay() {
   const display = document.querySelector("#display");
   display.addEventListener("change", (event) => {
     const toggle = event.target.closest(".todoToggle");
@@ -147,9 +169,10 @@ function initApp() {
   setupNewTodoDialog();
   setupCreateTodoEvent();
   setupCancelTodoEvent();
-  setupClickEvents();
-  setupBlurEvents();
-  setupChangeEvents();
+  setupClickEventsForSidebar();
+  setupClickEventsForDisplay();
+  setupBlurEventsForDisplay();
+  setupChangeEventsForDisplay();
 }
 document.addEventListener("DOMContentLoaded", initApp());
 
