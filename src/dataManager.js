@@ -35,16 +35,15 @@ export function getData() {
       project = project[1];
       addNewProject(project._name, project._id);
       const renewTodos = project._todos;
-      console.log(renewTodos);
       for (let todo of renewTodos) {
         addNewTodo(
           project._id,
-          todo[1]._id,
           todo[1]._title,
           todo[1]._description,
           todo[1]._priority,
           todo[1]._dueDate,
-          todo[1]._status
+          todo[1]._status,
+          todo[1]._id,
         );
       }
     }
@@ -61,14 +60,10 @@ function convertProjectMap(map) {
 }
 function saveData() {
   console.log("saving");
-
   const dataToStore = convertProjectMap(projectMap);
-  console.log(JSON.stringify(dataToStore));
-  console.log(JSON.stringify(Array.from(projectMap.entries())));
   localStorage.setItem(
     "projects",
     JSON.stringify(dataToStore)
-    //JSON.stringify(Object.fromEntries(projectMap))
   );
 }
 export function addNewProject(name, id) {
@@ -76,9 +71,13 @@ export function addNewProject(name, id) {
   projectMap.set(newProject.id, newProject);
   saveData();
 }
-export function addNewTodo(projectID, todoID, title, desc, pri, date, status) {
+export function addNewTodo(projectID, title, desc, pri, date, status, todoID) {
   const newTodo = new Todo(title, desc, pri, date, status, todoID);
   projectMap.get(projectID).addTodoToProject(newTodo);
+  saveData();
+}
+export function deleteTodo(projectID, todoID) {
+  projectMap.get(projectID).removeTodoFromProject(todoID);
   saveData();
 }
 export function toggleTodoStatus(projectID, todoID) {

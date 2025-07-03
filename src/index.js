@@ -1,13 +1,5 @@
 import "./style.css";
-import {
-  addNewProject,
-  addNewTodo,
-  getData,
-  getProjectMap,
-  changeProjectName,
-  getCurrentProject,
-  toggleTodoStatus,
-} from "./dataManager.js";
+import * as dataManager from "./dataManager.js";
 import { updateDisplay, updateSidebar } from "./display.js";
 
 //New Todo button
@@ -17,7 +9,7 @@ function setupNewTodoDialog() {
   newTodo.addEventListener("click", () => {
     const options = dialog.querySelector("#selectProject");
     options.innerHTML = "";
-    const projectMap = getProjectMap();
+    const projectMap = dataManager.getProjectMap();
     for (const project of projectMap.keys()) {
       const option = document.createElement("option");
       option.value = project;
@@ -32,7 +24,7 @@ function setupNewProjectDialog() {
   const newProjectBtn = document.getElementById("newProjectBtn");
   newProjectBtn.addEventListener("click", () => {
     const projectName = prompt("Enter project name");
-    addNewProject(projectName);
+    dataManager.addNewProject(projectName);
     updateSidebar();
   });
 }
@@ -55,7 +47,7 @@ function setupCreateTodoEvent() {
       }
     });
     if (valid) {
-      addNewTodo(
+      dataManager.addNewTodo(
         newTodoProject.value,
         newTodoTitle.value,
         newTodoDescription.value,
@@ -82,8 +74,7 @@ function setupClickEvents() {
   const display = document.querySelector("#display");
   display.addEventListener("click", (event) => {
     if (
-      event.target.closest(".todoToggle") ||
-      event.target.closest(".todoDeleteButton")
+      event.target.closest(".todoToggle")
     ) {
       return;
     }
@@ -99,9 +90,12 @@ function setupClickEvents() {
             content.style.maxHeight = content.scrollHeight + "px";
           }
           break;
-        case "edit":
+        case "edit-todo":
           break;
-        case "delete":
+        case "delete-todo":
+          const todoID = actionElement.closest("[data-todo-id]").getAttribute("data-todo-id");
+          dataManager.deleteTodo(dataManager.getCurrentProject().id, todoID);
+          updateDisplay();
           break;
       }
     }
@@ -111,7 +105,7 @@ function setupBlurEvents() {
   const projectHeader = document.querySelector("#projectHeader");
   projectHeader.addEventListener("blur", (event) => {
     const newName = event.target.textContent.trim();
-    changeProjectName(getCurrentProject().id, newName);
+    dataManager.changeProjectName(dataManager.getCurrentProject().id, newName);
     updateSidebar();
   });
   projectHeader.addEventListener("keydown", (event) => {
@@ -131,8 +125,8 @@ function setupChangeEvents() {
         return;
       }
       const todoId = todo.dataset.todoId;
-      const project = getCurrentProject();
-      toggleTodoStatus(project.id, todoId);
+      const project = dataManager.getCurrentProject();
+      dataManager.toggleTodoStatus(project.id, todoId);
 
       const complete = toggle.checked;
 
@@ -146,7 +140,7 @@ function setupChangeEvents() {
 }
 //main
 function initApp() {
-  getData();
+  dataManager.getData();
   updateDisplay();
   updateSidebar();
   setupNewProjectDialog();
@@ -162,6 +156,7 @@ document.addEventListener("DOMContentLoaded", initApp());
 //todo:
 //edit details
 //delete todo
+
 //project:
 //create project same as todo
 //change http address

@@ -35,10 +35,10 @@ function updateDisplay() {
     todoTitle.classList.add("todoTitle");
     const todoEditButton = document.createElement("button");
     todoEditButton.classList.add("todoEditButton");
-    todoEditButton.setAttribute("data-action", "edit");
+    todoEditButton.setAttribute("data-action", "edit-todo");
     const todoDeleteButton = document.createElement("button");
     todoDeleteButton.classList.add("todoDeleteButton");
-    todoDeleteButton.setAttribute("data-action", "delete");
+    todoDeleteButton.setAttribute("data-action", "delete-todo");
     const newTodoDescription = document.createElement("p");
     newTodoDescription.className = "todoDescription";
     newTodoDescription.textContent = todo.description;
@@ -64,6 +64,9 @@ function updateSidebar() {
     const projectBtn = document.createElement("button");
     projectBtn.textContent = project.name;
     projectBtn.setAttribute("data-project-id", project.id);
+    const projectDeleteButton = document.createElement("button");
+    projectDeleteButton.classList.add("projectDeleteButton");
+    projectDeleteButton.setAttribute("data-action", "delete-project");
     projectsList.appendChild(projectBtn);
     projectBtn.addEventListener("click", () => {
       setCurrentProject(project);

@@ -25,8 +25,8 @@ class Project {
   addTodoToProject(todo) {
     this._todos.set(todo.id, todo);
   }
-  removeTodoFromProject(todo) {
-    this._todos.delete(todo.id);
+  removeTodoFromProject(todoID) {
+    this._todos.delete(todoID);
   }
   getTodoById(id) {
     return this._todos.get(id);
