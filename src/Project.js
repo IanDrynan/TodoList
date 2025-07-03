@@ -2,7 +2,7 @@ class Project {
   constructor(name, id) {
     this._id = id || crypto.randomUUID();
     this._name = name;
-    this._todos = [];
+    this._todos = new Map();
   }
   get id() {
     return this._id;
@@ -23,10 +23,13 @@ class Project {
     this._todos = todos;
   }
   addTodoToProject(todo) {
-    this._todos.push(todo);
+    this._todos.set(todo.id, todo);
   }
   removeTodoFromProject(todo) {
-    this._todos.splice(this._todos.indexOf(todo), 1);
+    this._todos.delete(todo.id);
+  }
+  getTodoById(id) {
+    return this._todos.get(id);
   }
 }
 export { Project };

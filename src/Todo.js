@@ -1,9 +1,17 @@
 class Todo {
-  constructor(title, description = "", priority = "p1", dueDate) {
+  constructor(title, description = "", priority = "p1", dueDate, status, id) {
+    this._id = id || crypto.randomUUID();
     this._title = title;
     this._description = description;
     this._priority = priority;
     this._dueDate = dueDate;
+    this._status = status || false;
+  }
+  get id() {
+    return this._id;
+  }
+  set id(id) {
+    this._id = id;
   }
   get title() {
     return this._title;
@@ -28,6 +36,15 @@ class Todo {
   }
   set dueDate(dueDate) {
     this._dueDate = dueDate;
+  }
+  get status() {
+    return this._status;
+  }
+  set status(status) {
+    this._status = status;
+  }
+  toggleStatus() {
+    this._status = !this._status;
   }
 }
 

@@ -1,131 +1,265 @@
 @import url(resetTemplate.css);
 
 :root {
-    --main-color-1: #333446;
-    --main-color-2: #7F8CAA;
-    --main-color-3: #B8CFCE;
-    --main-color-4: #EAEFEF;
+  --main-color-1: #333446;
+  --main-color-2: #7f8caa;
+  --main-color-3: #b8cfce;
+  --main-color-4: #eaefef;
 }
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
-    color: var(--main-color-4);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  color: var(--main-color-4);
 }
 #sidebar {
-    padding: 2rem;
-    width: 300px;
-    background-color: var(--main-color-1);
-    flex-shrink: 0;
+  padding: 2rem;
+  width: 300px;
+  background-color: var(--main-color-1);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  ul {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-
-    ul {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        margin: 0;
-        padding: 0;
-    }
-    button {
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+  button {
     text-align: left;
 
-        &::before {
-        content: ">";
-        margin-right: 1rem;
-        }
+    &::before {
+      content: ">";
+      margin-right: 1rem;
     }
+  }
 }
 
 button {
-    cursor: pointer;
-    border: none;
-    background-color: var(--main-color-1);
-    color: var(--main-color-4);
+  cursor: pointer;
+  border: none;
+  background-color: var(--main-color-1);
+  color: var(--main-color-4);
 
-    &:hover {
-    filter:brightness(0.9);
+  &:hover {
+    filter: brightness(0.9);
     transform: translate(1px, 1px);
-    }
-    &:active {
+  }
+  &:active {
     filter: brightness(1.1);
     transform: translate(-1px, -1px);
-    }
+  }
 }
 
 #main {
-    padding: 2rem;
-    background-color: var(--main-color-2);
-    flex: 1;
+  padding: 2rem;
+  background-color: var(--main-color-2);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  #display {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 1rem;
 
-    #display {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
+    .todo {
+      display: flex;
+      flex-direction: column;
+
+      &[data-status="complete"] {
+        text-decoration: line-through;
+        opacity: 0.5;
+      }
     }
-    #mainBtns {
-        margin-top: auto;
+    .todoHeaderDiv {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 1rem;
+
+      .todoTitle {
+        margin-right: auto;
+        cursor: pointer;
+      }
+      .todoEditButton {
+        background-image: url("./assets/pencil.svg");
+        background-color: transparent;
+        width: 1.5rem;
+        height: 1.5rem;
+        background-size: contain;
+      }
+      .todoDeleteButton {
+        background-image: url("./assets/trashbin.svg");
+        background-color: transparent;
+        width: 1.5rem;
+        height: 1.5rem;
+        background-size: contain;
+      }
     }
+    .todoDescription {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+    }
+  }
+  #mainBtns {
+    margin-top: auto;
+  }
 }
 
 #newTodoDialog {
-    background-color: var(--main-color-2);
-    color: var(--main-color-4);
-    align-self: center;
-    justify-self: center;
+  background-color: var(--main-color-2);
+  color: var(--main-color-4);
+  align-self: center;
+  justify-self: center;
 
-    form {
-        display: grid;
-        grid:
-            "title title"
-            "description description"
-            "dueDate duedate"
-            "project priority"
-            "submit cancel"
-            ;
-        gap: 1rem;
-
-        #todoFormTitle {
-            grid-area: title;
-        }
-        #todoFormDescription {
-            grid-area: description;
-        }
-        #todoFormDueDate {
-            grid-area: dueDate;
-        }
-        #todoFormPriority {
-            grid-area: priority;
-        }
-        #todoFormProject {
-            grid-area: project;
-        }
-        #todoFormSubmit {
-            grid-area: submit;
-        }
-        #todoFormCancel {
-            grid-area: cancel;
-        }
-    }
-}
-.todoHeaderDiv {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  form {
+    display: grid;
+    grid:
+      "title title"
+      "description description"
+      "dueDate duedate"
+      "project priority"
+      "submit cancel";
     gap: 1rem;
 
-    .todoTitle {
-        margin-right: auto;
-        cursor:pointer;
+    #todoFormTitle {
+      grid-area: title;
     }
+    #todoFormDescription {
+      grid-area: description;
+    }
+    #todoFormDueDate {
+      grid-area: dueDate;
+    }
+    #todoFormPriority {
+      grid-area: priority;
+    }
+    #todoFormProject {
+      grid-area: project;
+    }
+    #todoFormSubmit {
+      grid-area: submit;
+    }
+    #todoFormCancel {
+      grid-area: cancel;
+    }
+  }
 }
-.todoDescription {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-}
+/*
+<div class="checkbox-wrapper-15">
+  <input class="inp-cbx" id="cbx-15" type="checkbox" style="display: none;"/>
+  <label class="cbx" for="cbx-15">
+    <span>
+      <svg width="12px" height="9px" viewbox="0 0 12 9">
+        <polyline points="1 5 4 8 11 1"></polyline>
+      </svg>
+    </span>
+    <span>To-do</span>
+  </label>
+</div>
+
+<style>
+  .checkbox-wrapper-15 .cbx {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+  }
+  .checkbox-wrapper-15 .cbx span {
+    display: inline-block;
+    vertical-align: middle;
+    transform: translate3d(0, 0, 0);
+  }
+  .checkbox-wrapper-15 .cbx span:first-child {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    transform: scale(1);
+    vertical-align: middle;
+    border: 1px solid #B9B8C3;
+    transition: all 0.2s ease;
+  }
+  .checkbox-wrapper-15 .cbx span:first-child svg {
+    position: absolute;
+    z-index: 1;
+    top: 8px;
+    left: 6px;
+    fill: none;
+    stroke: white;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16px;
+    stroke-dashoffset: 16px;
+    transition: all 0.3s ease;
+    transition-delay: 0.1s;
+    transform: translate3d(0, 0, 0);
+  }
+  .checkbox-wrapper-15 .cbx span:first-child:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: #506EEC;
+    display: block;
+    transform: scale(0);
+    opacity: 1;
+    border-radius: 50%;
+    transition-delay: 0.2s;
+  }
+  .checkbox-wrapper-15 .cbx span:last-child {
+    margin-left: 8px;
+  }
+  .checkbox-wrapper-15 .cbx span:last-child:after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    background: #B9B8C3;
+    transform-origin: 0 0;
+    transform: scaleX(0);
+  }
+  .checkbox-wrapper-15 .cbx:hover span:first-child {
+    border-color: #3c53c7;
+  }
+
+  .checkbox-wrapper-15 .inp-cbx:checked + .cbx span:first-child {
+    border-color: #3c53c7;
+    background: #3c53c7;
+    animation: check-15 0.6s ease;
+  }
+  .checkbox-wrapper-15 .inp-cbx:checked + .cbx span:first-child svg {
+    stroke-dashoffset: 0;
+  }
+  .checkbox-wrapper-15 .inp-cbx:checked + .cbx span:first-child:before {
+    transform: scale(2.2);
+    opacity: 0;
+    transition: all 0.6s ease;
+  }
+  .checkbox-wrapper-15 .inp-cbx:checked + .cbx span:last-child {
+    color: #B9B8C3;
+    transition: all 0.3s ease;
+  }
+  .checkbox-wrapper-15 .inp-cbx:checked + .cbx span:last-child:after {
+    transform: scaleX(1);
+    transition: all 0.3s ease;
+  }
+
+  @keyframes check-15 {
+    50% {
+      transform: scale(1.2);
+    }
+  }
+</style>
+*/

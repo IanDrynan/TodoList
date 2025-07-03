@@ -1,6 +1,7 @@
 import { Project } from "./Project.js";
 import { Todo } from "./Todo.js";
 
+const projectMap = new Map();
 let currentProject = ""; //object of current displayed project
 export function getCurrentProject() {
   return currentProject;
@@ -8,7 +9,6 @@ export function getCurrentProject() {
 export function setCurrentProject(project) {
   currentProject = project;
 }
-const projectMap = new Map();
 export function getProjectMap() {
   return projectMap;
 }
@@ -30,30 +30,45 @@ export function getData() {
     initData();
   } else {
     const projects = JSON.parse(localStorage.getItem("projects"));
-    console.log(projects);
     //Need to recreate all projects and todos to restore methods
-    for (let project in projects) {
-      console.log(project);
-      addNewProject(projects[project]._name, projects[project]._id);
-      const renewTodos = projects[project]._todos;
-      for (let todo in renewTodos) {
+    for (let project of projects) {
+      project = project[1];
+      addNewProject(project._name, project._id);
+      const renewTodos = project._todos;
+      console.log(renewTodos);
+      for (let todo of renewTodos) {
         addNewTodo(
-          projects[project]._id,
-          renewTodos[todo]._title,
-          renewTodos[todo]._description,
-          renewTodos[todo]._priority,
-          renewTodos[todo]._dueDate
+          project._id,
+          todo[1]._id,
+          todo[1]._title,
+          todo[1]._description,
+          todo[1]._priority,
+          todo[1]._dueDate,
+          todo[1]._status
         );
       }
     }
   }
   setCurrentProject(projectMap.values().next().value);
 }
+function convertProjectMap(map) {
+  const convertedProjectMap = Array.from(map.entries()).map(([projectID, projectObj]) => {
+    const convertedTodoMap = {...projectObj};
+    convertedTodoMap._todos = Array.from(convertedTodoMap._todos.entries());
+    return [projectID, convertedTodoMap];
+  });
+  return convertedProjectMap;
+}
 function saveData() {
   console.log("saving");
+
+  const dataToStore = convertProjectMap(projectMap);
+  console.log(JSON.stringify(dataToStore));
+  console.log(JSON.stringify(Array.from(projectMap.entries())));
   localStorage.setItem(
     "projects",
-    JSON.stringify(Object.fromEntries(projectMap))
+    JSON.stringify(dataToStore)
+    //JSON.stringify(Object.fromEntries(projectMap))
   );
 }
 export function addNewProject(name, id) {
@@ -61,8 +76,12 @@ export function addNewProject(name, id) {
   projectMap.set(newProject.id, newProject);
   saveData();
 }
-export function addNewTodo(projectID, title, desc, pri, date) {
-  const newTodo = new Todo(title, desc, pri, date);
+export function addNewTodo(projectID, todoID, title, desc, pri, date, status) {
+  const newTodo = new Todo(title, desc, pri, date, status, todoID);
   projectMap.get(projectID).addTodoToProject(newTodo);
+  saveData();
+}
+export function toggleTodoStatus(projectID, todoID) {
+  projectMap.get(projectID).getTodoById(todoID).toggleStatus();
   saveData();
 }

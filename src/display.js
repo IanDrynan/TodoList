@@ -1,9 +1,15 @@
-import { getCurrentProject, setCurrentProject, getProjectMap } from "./dataManager.js";
+import {
+  getCurrentProject,
+  setCurrentProject,
+  getProjectMap,
+} from "./dataManager.js";
 
 function updateDisplay() {
   const project = getCurrentProject();
   const projectName = document.querySelector("#projectHeader");
-  if(project.name != "inbox") {
+  if (project.name === "inbox") {
+    projectName.removeAttribute("contenteditable");
+  } else {
     projectName.setAttribute("contenteditable", "plaintext-only");
   }
   projectName.textContent = project.name;
@@ -14,18 +20,24 @@ function updateDisplay() {
   project.todos.forEach((todo) => {
     const todoDiv = document.createElement("div");
     todoDiv.className = "todo";
+    todoDiv.setAttribute("data-todo-id", todo.id);
+    if (todo.status) {
+      todoDiv.setAttribute("data-status", "complete");
+    }
     const todoHeaderDiv = document.createElement("div");
     todoHeaderDiv.className = "todoHeaderDiv";
     todoHeaderDiv.setAttribute("data-action", "expand");
     const todoToggle = document.createElement("input");
+    todoToggle.classList.add("todoToggle");
     todoToggle.type = "checkbox";
+    todoToggle.checked = todo.status;
     const todoTitle = document.createElement("h2");
     todoTitle.classList.add("todoTitle");
     const todoEditButton = document.createElement("button");
-    todoEditButton.textContent = "Edit";
+    todoEditButton.classList.add("todoEditButton");
     todoEditButton.setAttribute("data-action", "edit");
     const todoDeleteButton = document.createElement("button");
-    todoDeleteButton.textContent = "Delete";
+    todoDeleteButton.classList.add("todoDeleteButton");
     todoDeleteButton.setAttribute("data-action", "delete");
     const newTodoDescription = document.createElement("p");
     newTodoDescription.className = "todoDescription";
@@ -36,6 +48,7 @@ function updateDisplay() {
     todoDueDate.textContent = tempDate !== "Invalid Date" ? tempDate : "";
     display.append(todoDiv);
     todoDiv.append(todoHeaderDiv);
+    todoHeaderDiv.append(todoToggle);
     todoHeaderDiv.append(todoTitle);
     todoHeaderDiv.append(todoEditButton);
     todoHeaderDiv.append(todoDeleteButton);

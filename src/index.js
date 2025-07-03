@@ -6,6 +6,7 @@ import {
   getProjectMap,
   changeProjectName,
   getCurrentProject,
+  toggleTodoStatus,
 } from "./dataManager.js";
 import { updateDisplay, updateSidebar } from "./display.js";
 
@@ -77,30 +78,36 @@ function setupCancelTodoEvent() {
     newTodoDialog.close();
   });
 }
-function setupTodoCollapsibleEvent() {
+function setupClickEvents() {
   const display = document.querySelector("#display");
   display.addEventListener("click", (event) => {
-    const actionElement = event.target.closest('[data-action]');
+    if (
+      event.target.closest(".todoToggle") ||
+      event.target.closest(".todoDeleteButton")
+    ) {
+      return;
+    }
+    const actionElement = event.target.closest("[data-action]");
     if (actionElement) {
       const action = actionElement.dataset.action;
-      switch(action) {
-        case 'expand':
-          const content = event.target.nextElementSibling;
+      switch (action) {
+        case "expand":
+          const content = actionElement.nextElementSibling;
           if (content.style.maxHeight) {
             content.style.maxHeight = null;
           } else {
             content.style.maxHeight = content.scrollHeight + "px";
           }
           break;
-        case 'edit':
+        case "edit":
           break;
-        case 'delete':
+        case "delete":
           break;
       }
     }
   });
 }
-function setupEditableProject() {
+function setupBlurEvents() {
   const projectHeader = document.querySelector("#projectHeader");
   projectHeader.addEventListener("blur", (event) => {
     const newName = event.target.textContent.trim();
@@ -114,6 +121,29 @@ function setupEditableProject() {
     }
   });
 }
+function setupChangeEvents() {
+  const display = document.querySelector("#display");
+  display.addEventListener("change", (event) => {
+    const toggle = event.target.closest(".todoToggle");
+    if (toggle) {
+      const todo = toggle.closest(".todo");
+      if (!todo) {
+        return;
+      }
+      const todoId = todo.dataset.todoId;
+      const project = getCurrentProject();
+      toggleTodoStatus(project.id, todoId);
+
+      const complete = toggle.checked;
+
+      if (complete) {
+        todo.setAttribute("data-status", "complete");
+      } else {
+        todo.setAttribute("data-status", "incomplete");
+      }
+    }
+  });
+}
 //main
 function initApp() {
   getData();
@@ -123,8 +153,9 @@ function initApp() {
   setupNewTodoDialog();
   setupCreateTodoEvent();
   setupCancelTodoEvent();
-  setupTodoCollapsibleEvent();
-  setupEditableProject();
+  setupClickEvents();
+  setupBlurEvents();
+  setupChangeEvents();
 }
 document.addEventListener("DOMContentLoaded", initApp());
 
