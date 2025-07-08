@@ -14,6 +14,21 @@ body {
   height: 100vh;
   color: var(--main-color-4);
 }
+button {
+  cursor: pointer;
+  border: none;
+  background-color: var(--main-color-1);
+  color: var(--main-color-4);
+
+  &:hover {
+    filter: brightness(0.9);
+    transform: translate(1px, 1px);
+  }
+  &:active {
+    filter: brightness(1.1);
+    transform: translate(-1px, -1px);
+  }
+}
 #sidebar {
   padding: 2rem;
   width: 300px;
@@ -30,7 +45,11 @@ body {
     margin: 0;
     padding: 0;
   }
-  .projectButton {
+
+  .project {
+    display: flex;
+
+    .projectButton {
     text-align: left;
 
     &::before {
@@ -40,26 +59,13 @@ body {
   }
   .projectDeleteButton {
         margin: 0;
+        margin-left: auto;
         padding: 0;
         width: 1.5rem;
         height: 1.5rem;
       }
-}
-
-button {
-  cursor: pointer;
-  border: none;
-  background-color: var(--main-color-1);
-  color: var(--main-color-4);
-
-  &:hover {
-    filter: brightness(0.9);
-    transform: translate(1px, 1px);
   }
-  &:active {
-    filter: brightness(1.1);
-    transform: translate(-1px, -1px);
-  }
+
 }
 
 #main {
@@ -85,6 +91,7 @@ button {
       }
     }
     .todoHeaderDiv {
+      cursor: pointer;
       display: flex;
       flex: 1;
       flex-direction: row;

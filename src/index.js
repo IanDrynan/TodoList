@@ -5,19 +5,34 @@ import { updateDisplay, updateSidebar } from "./display.js";
 //New Todo button
 function setupNewTodoDialog() {
   const dialog = document.getElementById("newTodoDialog");
+  const newTodoTitle = newTodoDialog.querySelector("#todoTitle");
+  const newTodoDescription = newTodoDialog.querySelector("#description");
+  const newTodoPriority = newTodoDialog.querySelector("#priority");
+  const newTodoDueDate = newTodoDialog.querySelector("#dueDate");
+  const newTodoProject = newTodoDialog.querySelector("#selectProject");
+
   const newTodo = document.getElementById("newTodoBtn");
   newTodo.addEventListener("click", () => {
-    const options = dialog.querySelector("#selectProject");
-    options.innerHTML = "";
-    const projectMap = dataManager.getProjectMap();
-    for (const project of projectMap.keys()) {
-      const option = document.createElement("option");
-      option.value = project;
-      option.textContent = projectMap.get(project).name;
-      options.appendChild(option);
-    }
+    populateProjectSelector();
+    newTodoTitle.value = "";
+    newTodoDescription.value = "";
+    newTodoPriority.value = "";
+    newTodoDueDate.value = "";
+    newTodoProject.value = dataManager.getCurrentProject().id;
+    newTodoTitle.dataset.todoId = "";
     dialog.showModal();
   });
+}
+function populateProjectSelector() {
+  const options = document.getElementById("selectProject");
+  options.innerHTML = "";
+  const projectMap = dataManager.getProjectMap();
+  for (const project of projectMap.keys()) {
+    const option = document.createElement("option");
+    option.value = project;
+    option.textContent = projectMap.get(project).name;
+    options.appendChild(option);
+  }
 }
 //New Project button
 function setupNewProjectDialog() {
@@ -37,6 +52,7 @@ function setupCreateTodoEvent() {
   const newTodoDueDate = newTodoDialog.querySelector("#dueDate");
   const newTodoProject = newTodoDialog.querySelector("#selectProject");
   const confirmNewTodo = newTodoDialog.querySelector("#todoFormSubmit");
+
   confirmNewTodo.addEventListener("click", (event) => {
     event.preventDefault();
     const requiredFields = newTodoDialog.querySelectorAll("[required]");
@@ -52,7 +68,9 @@ function setupCreateTodoEvent() {
         newTodoTitle.value,
         newTodoDescription.value,
         newTodoPriority.value,
-        newTodoDueDate.value
+        newTodoDueDate.value,
+        false,
+        newTodoTitle.dataset.todoId
       );
       //update ui
       updateDisplay();
@@ -76,17 +94,25 @@ function setupClickEventsForSidebar() {
     const actionElement = event.target.closest("[data-action]");
     if (actionElement) {
       const action = actionElement.dataset.action;
-      const projectID = actionElement.closest("[data-project-id]").getAttribute("data-project-id");
+      const projectID = actionElement
+        .closest("[data-project-id]")
+        .getAttribute("data-project-id");
       switch (action) {
         case "select-project":
           dataManager.setCurrentProject(projectID);
           updateDisplay();
           break;
         case "delete-project":
-          dataManager.deleteProject(projectID);
-          dataManager.setCurrentProjectToInbox();
-          updateSidebar();
-          updateDisplay();
+          if (
+            confirm(
+              "Are you sure you want to delete this project and all of its todos?"
+            )
+          ) {
+            dataManager.deleteProject(projectID);
+            dataManager.setCurrentProjectToInbox();
+            updateSidebar();
+            updateDisplay();
+          }
           break;
       }
     }
@@ -95,30 +121,61 @@ function setupClickEventsForSidebar() {
 function setupClickEventsForDisplay() {
   const display = document.querySelector("#display");
   display.addEventListener("click", (event) => {
-    if (
-      event.target.closest(".todoToggle")
-    ) {
+    if (event.target.closest(".todoToggle")) {
       return;
     }
     const actionElement = event.target.closest("[data-action]");
+
     if (actionElement) {
+      const todoID = actionElement
+        .closest("[data-todo-id]")
+        .getAttribute("data-todo-id");
+      const projectID =
+        actionElement.closest("[data-project-id]").dataset.projectId;
       const action = actionElement.dataset.action;
-      switch (action) {
-        case "expand":
-          const content = actionElement.nextElementSibling;
-          if (content.style.maxHeight) {
-            content.style.maxHeight = null;
-          } else {
-            content.style.maxHeight = content.scrollHeight + "px";
-          }
-          break;
-        case "edit-todo":
-          break;
-        case "delete-todo":
-          const todoID = actionElement.closest("[data-todo-id]").getAttribute("data-todo-id");
-          dataManager.deleteTodo(dataManager.getCurrentProject().id, todoID);
-          updateDisplay();
-          break;
+      if (todoID) {
+        switch (action) {
+          case "expand":
+            const content = actionElement.nextElementSibling;
+            if (content.style.maxHeight) {
+              content.style.maxHeight = null;
+            } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+            }
+            break;
+          case "edit-todo":
+            populateProjectSelector();
+            const todo = dataManager.getTodoByID(projectID, todoID);
+            const newTodoDialog = document.getElementById("newTodoDialog");
+            const newTodoTitle = newTodoDialog.querySelector("#todoTitle");
+            newTodoTitle.dataset.todoId = todoID;
+            const newTodoDescription =
+              newTodoDialog.querySelector("#description");
+            const newTodoPriority = newTodoDialog.querySelector("#priority");
+            const newTodoDueDate = newTodoDialog.querySelector("#dueDate");
+            const newTodoProject =
+              newTodoDialog.querySelector("#selectProject");
+
+            if (todo) {
+              newTodoTitle.value = todo.title;
+              newTodoDescription.value = todo.description;
+              newTodoPriority.value = todo.priority;
+              newTodoDueDate.value = todo.dueDate;
+              newTodoProject.value = projectID;
+            }
+            newTodoDialog.showModal();
+            break;
+          case "delete-todo":
+            if (confirm("Are you sure you want to delete this todo?")) {
+              dataManager.deleteTodo(
+                dataManager.getCurrentProject().id,
+                todoID
+              );
+              updateDisplay();
+            }
+
+            break;
+        }
       }
     }
   });
@@ -178,9 +235,3 @@ document.addEventListener("DOMContentLoaded", initApp());
 
 //todo:
 //edit details
-//delete todo
-
-//project:
-//create project same as todo
-//change http address
-//delete project

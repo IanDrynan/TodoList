@@ -22,6 +22,7 @@ function updateDisplay() {
     const todoDiv = document.createElement("div");
     todoDiv.className = "todo";
     todoDiv.setAttribute("data-todo-id", todo.id);
+    todoDiv.setAttribute("data-project-id", project.id);
     if (todo.status) {
       todoDiv.setAttribute("data-status", "complete");
     }

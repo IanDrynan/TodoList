@@ -94,3 +94,6 @@ export function setCurrentProjectToInbox() {
 export function getInboxID() {
   return projectMap.values().next().value.id;
 }
+export function getTodoByID(projectID, todoID) {
+  return projectMap.get(projectID).getTodoById(todoID);
+}
