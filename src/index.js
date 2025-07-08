@@ -233,5 +233,3 @@ function initApp() {
 }
 document.addEventListener("DOMContentLoaded", initApp());
 
-//todo:
-//edit details
