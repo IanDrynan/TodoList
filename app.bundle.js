@@ -2,9 +2,138 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 208:
-/***/ ((module, __unused_webpack___webpack_exports__, __webpack_require__) => {
+/***/ 56:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+
+
+/* istanbul ignore next  */
+function setAttributesWithoutAttributes(styleElement) {
+  var nonce =  true ? __webpack_require__.nc : 0;
+  if (nonce) {
+    styleElement.setAttribute("nonce", nonce);
+  }
+}
+module.exports = setAttributesWithoutAttributes;
+
+/***/ }),
+
+/***/ 72:
+/***/ ((module) => {
+
+
+
+var stylesInDOM = [];
+function getIndexByIdentifier(identifier) {
+  var result = -1;
+  for (var i = 0; i < stylesInDOM.length; i++) {
+    if (stylesInDOM[i].identifier === identifier) {
+      result = i;
+      break;
+    }
+  }
+  return result;
+}
+function modulesToDom(list, options) {
+  var idCountMap = {};
+  var identifiers = [];
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i];
+    var id = options.base ? item[0] + options.base : item[0];
+    var count = idCountMap[id] || 0;
+    var identifier = "".concat(id, " ").concat(count);
+    idCountMap[id] = count + 1;
+    var indexByIdentifier = getIndexByIdentifier(identifier);
+    var obj = {
+      css: item[1],
+      media: item[2],
+      sourceMap: item[3],
+      supports: item[4],
+      layer: item[5]
+    };
+    if (indexByIdentifier !== -1) {
+      stylesInDOM[indexByIdentifier].references++;
+      stylesInDOM[indexByIdentifier].updater(obj);
+    } else {
+      var updater = addElementStyle(obj, options);
+      options.byIndex = i;
+      stylesInDOM.splice(i, 0, {
+        identifier: identifier,
+        updater: updater,
+        references: 1
+      });
+    }
+    identifiers.push(identifier);
+  }
+  return identifiers;
+}
+function addElementStyle(obj, options) {
+  var api = options.domAPI(options);
+  api.update(obj);
+  var updater = function updater(newObj) {
+    if (newObj) {
+      if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap && newObj.supports === obj.supports && newObj.layer === obj.layer) {
+        return;
+      }
+      api.update(obj = newObj);
+    } else {
+      api.remove();
+    }
+  };
+  return updater;
+}
+module.exports = function (list, options) {
+  options = options || {};
+  list = list || [];
+  var lastIdentifiers = modulesToDom(list, options);
+  return function update(newList) {
+    newList = newList || [];
+    for (var i = 0; i < lastIdentifiers.length; i++) {
+      var identifier = lastIdentifiers[i];
+      var index = getIndexByIdentifier(identifier);
+      stylesInDOM[index].references--;
+    }
+    var newLastIdentifiers = modulesToDom(newList, options);
+    for (var _i = 0; _i < lastIdentifiers.length; _i++) {
+      var _identifier = lastIdentifiers[_i];
+      var _index = getIndexByIdentifier(_identifier);
+      if (stylesInDOM[_index].references === 0) {
+        stylesInDOM[_index].updater();
+        stylesInDOM.splice(_index, 1);
+      }
+    }
+    lastIdentifiers = newLastIdentifiers;
+  };
+};
+
+/***/ }),
+
+/***/ 113:
+/***/ ((module) => {
+
+
+
+/* istanbul ignore next  */
+function styleTagTransform(css, styleElement) {
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css;
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild);
+    }
+    styleElement.appendChild(document.createTextNode(css));
+  }
+}
+module.exports = styleTagTransform;
+
+/***/ }),
+
+/***/ 208:
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   A: () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(354);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(314);
@@ -302,7 +431,7 @@ button {
 */
 `, "",{"version":3,"sources":["webpack://./src/style.css"],"names":[],"mappings":"AAEA;EACE,uBAAuB;EACvB,uBAAuB;EACvB,uBAAuB;EACvB,uBAAuB;AACzB;AACA;EACE;wEACsE;EACtE,aAAa;EACb,mBAAmB;EACnB,aAAa;EACb,0BAA0B;AAC5B;AACA;EACE,eAAe;EACf,YAAY;EACZ,qCAAqC;EACrC,0BAA0B;;EAE1B;IACE,uBAAuB;IACvB,8BAA8B;EAChC;EACA;IACE,uBAAuB;IACvB,gCAAgC;EAClC;AACF;AACA;EACE,aAAa;EACb,YAAY;EACZ,qCAAqC;EACrC,cAAc;EACd,aAAa;EACb,sBAAsB;EACtB,8BAA8B;;EAE9B;IACE,aAAa;IACb,sBAAsB;IACtB,SAAS;IACT,SAAS;IACT,UAAU;EACZ;;EAEA;IACE,aAAa;;IAEb;IACA,gBAAgB;;IAEhB;MACE,YAAY;MACZ,kBAAkB;IACpB;EACF;EACA;QACM,SAAS;QACT,iBAAiB;QACjB,UAAU;QACV,aAAa;QACb,cAAc;MAChB;EACJ;;AAEF;;AAEA;EACE,aAAa;EACb,qCAAqC;EACrC,OAAO;EACP,aAAa;EACb,sBAAsB;EACtB,8BAA8B;;EAE9B;IACE,aAAa;IACb,sBAAsB;IACtB,SAAS;;IAET;MACE,aAAa;MACb,sBAAsB;;MAEtB;QACE,6BAA6B;QAC7B,YAAY;MACd;IACF;IACA;MACE,eAAe;MACf,aAAa;MACb,OAAO;MACP,mBAAmB;MACnB,8BAA8B;MAC9B,SAAS;;MAET;QACE,kBAAkB;QAClB,eAAe;MACjB;MACA;QACE,yDAA4C;QAC5C,6BAA6B;QAC7B,aAAa;QACb,cAAc;QACd,wBAAwB;MAC1B;MACA;QACE,yDAA8C;QAC9C,6BAA6B;QAC7B,aAAa;QACb,cAAc;QACd,wBAAwB;MAC1B;IACF;IACA;MACE,aAAa;MACb,gBAAgB;MAChB,oCAAoC;IACtC;EACF;EACA;IACE,gBAAgB;EAClB;AACF;;AAEA;EACE,qCAAqC;EACrC,0BAA0B;EAC1B,kBAAkB;EAClB,oBAAoB;;EAEpB;IACE,aAAa;IACb;;;;;qBAKiB;IACjB,SAAS;;IAET;MACE,gBAAgB;IAClB;IACA;MACE,sBAAsB;IACxB;IACA;MACE,kBAAkB;IACpB;IACA;MACE,mBAAmB;IACrB;IACA;MACE,kBAAkB;IACpB;IACA;MACE,iBAAiB;IACnB;IACA;MACE,iBAAiB;IACnB;EACF;AACF;AACA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;CA4GC","sourcesContent":["@import url(resetTemplate.css);\n\n:root {\n  --main-color-1: #333446;\n  --main-color-2: #7f8caa;\n  --main-color-3: #b8cfce;\n  --main-color-4: #eaefef;\n}\nbody {\n  font-family: system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto,\n    Oxygen, Ubuntu, Cantarell, \"Open Sans\", \"Helvetica Neue\", sans-serif;\n  display: flex;\n  flex-direction: row;\n  height: 100vh;\n  color: var(--main-color-4);\n}\nbutton {\n  cursor: pointer;\n  border: none;\n  background-color: var(--main-color-1);\n  color: var(--main-color-4);\n\n  &:hover {\n    filter: brightness(0.9);\n    transform: translate(1px, 1px);\n  }\n  &:active {\n    filter: brightness(1.1);\n    transform: translate(-1px, -1px);\n  }\n}\n#sidebar {\n  padding: 2rem;\n  width: 300px;\n  background-color: var(--main-color-1);\n  flex-shrink: 0;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n\n  ul {\n    display: flex;\n    flex-direction: column;\n    gap: 1rem;\n    margin: 0;\n    padding: 0;\n  }\n\n  .project {\n    display: flex;\n\n    .projectButton {\n    text-align: left;\n\n    &::before {\n      content: \">\";\n      margin-right: 1rem;\n    }\n  }\n  .projectDeleteButton {\n        margin: 0;\n        margin-left: auto;\n        padding: 0;\n        width: 1.5rem;\n        height: 1.5rem;\n      }\n  }\n\n}\n\n#main {\n  padding: 2rem;\n  background-color: var(--main-color-2);\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n\n  #display {\n    display: flex;\n    flex-direction: column;\n    gap: 1rem;\n\n    .todo {\n      display: flex;\n      flex-direction: column;\n\n      &[data-status=\"complete\"] {\n        text-decoration: line-through;\n        opacity: 0.5;\n      }\n    }\n    .todoHeaderDiv {\n      cursor: pointer;\n      display: flex;\n      flex: 1;\n      flex-direction: row;\n      justify-content: space-between;\n      gap: 1rem;\n\n      .todoTitle {\n        margin-right: auto;\n        cursor: pointer;\n      }\n      .todoEditButton {\n        background-image: url(\"./assets/pencil.svg\");\n        background-color: transparent;\n        width: 1.5rem;\n        height: 1.5rem;\n        background-size: contain;\n      }\n      .todoDeleteButton {\n        background-image: url(\"./assets/trashbin.svg\");\n        background-color: transparent;\n        width: 1.5rem;\n        height: 1.5rem;\n        background-size: contain;\n      }\n    }\n    .todoDescription {\n      max-height: 0;\n      overflow: hidden;\n      transition: max-height 0.2s ease-out;\n    }\n  }\n  #mainBtns {\n    margin-top: auto;\n  }\n}\n\n#newTodoDialog {\n  background-color: var(--main-color-2);\n  color: var(--main-color-4);\n  align-self: center;\n  justify-self: center;\n\n  form {\n    display: grid;\n    grid:\n      \"title title\"\n      \"description description\"\n      \"dueDate duedate\"\n      \"project priority\"\n      \"submit cancel\";\n    gap: 1rem;\n\n    #todoFormTitle {\n      grid-area: title;\n    }\n    #todoFormDescription {\n      grid-area: description;\n    }\n    #todoFormDueDate {\n      grid-area: dueDate;\n    }\n    #todoFormPriority {\n      grid-area: priority;\n    }\n    #todoFormProject {\n      grid-area: project;\n    }\n    #todoFormSubmit {\n      grid-area: submit;\n    }\n    #todoFormCancel {\n      grid-area: cancel;\n    }\n  }\n}\n/*\n<div class=\"checkbox-wrapper-15\">\n  <input class=\"inp-cbx\" id=\"cbx-15\" type=\"checkbox\" style=\"display: none;\"/>\n  <label class=\"cbx\" for=\"cbx-15\">\n    <span>\n      <svg width=\"12px\" height=\"9px\" viewbox=\"0 0 12 9\">\n        <polyline points=\"1 5 4 8 11 1\"></polyline>\n      </svg>\n    </span>\n    <span>To-do</span>\n  </label>\n</div>\n\n<style>\n  .checkbox-wrapper-15 .cbx {\n    -webkit-user-select: none;\n    user-select: none;\n    -webkit-tap-highlight-color: transparent;\n    cursor: pointer;\n  }\n  .checkbox-wrapper-15 .cbx span {\n    display: inline-block;\n    vertical-align: middle;\n    transform: translate3d(0, 0, 0);\n  }\n  .checkbox-wrapper-15 .cbx span:first-child {\n    position: relative;\n    width: 24px;\n    height: 24px;\n    border-radius: 50%;\n    transform: scale(1);\n    vertical-align: middle;\n    border: 1px solid #B9B8C3;\n    transition: all 0.2s ease;\n  }\n  .checkbox-wrapper-15 .cbx span:first-child svg {\n    position: absolute;\n    z-index: 1;\n    top: 8px;\n    left: 6px;\n    fill: none;\n    stroke: white;\n    stroke-width: 2;\n    stroke-linecap: round;\n    stroke-linejoin: round;\n    stroke-dasharray: 16px;\n    stroke-dashoffset: 16px;\n    transition: all 0.3s ease;\n    transition-delay: 0.1s;\n    transform: translate3d(0, 0, 0);\n  }\n  .checkbox-wrapper-15 .cbx span:first-child:before {\n    content: \"\";\n    width: 100%;\n    height: 100%;\n    background: #506EEC;\n    display: block;\n    transform: scale(0);\n    opacity: 1;\n    border-radius: 50%;\n    transition-delay: 0.2s;\n  }\n  .checkbox-wrapper-15 .cbx span:last-child {\n    margin-left: 8px;\n  }\n  .checkbox-wrapper-15 .cbx span:last-child:after {\n    content: \"\";\n    position: absolute;\n    top: 8px;\n    left: 0;\n    height: 1px;\n    width: 100%;\n    background: #B9B8C3;\n    transform-origin: 0 0;\n    transform: scaleX(0);\n  }\n  .checkbox-wrapper-15 .cbx:hover span:first-child {\n    border-color: #3c53c7;\n  }\n\n  .checkbox-wrapper-15 .inp-cbx:checked + .cbx span:first-child {\n    border-color: #3c53c7;\n    background: #3c53c7;\n    animation: check-15 0.6s ease;\n  }\n  .checkbox-wrapper-15 .inp-cbx:checked + .cbx span:first-child svg {\n    stroke-dashoffset: 0;\n  }\n  .checkbox-wrapper-15 .inp-cbx:checked + .cbx span:first-child:before {\n    transform: scale(2.2);\n    opacity: 0;\n    transition: all 0.6s ease;\n  }\n  .checkbox-wrapper-15 .inp-cbx:checked + .cbx span:last-child {\n    color: #B9B8C3;\n    transition: all 0.3s ease;\n  }\n  .checkbox-wrapper-15 .inp-cbx:checked + .cbx span:last-child:after {\n    transform: scaleX(1);\n    transition: all 0.3s ease;\n  }\n\n  @keyframes check-15 {\n    50% {\n      transform: scale(1.2);\n    }\n  }\n</style>\n*/\n"],"sourceRoot":""}]);
 // Exports
-/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (___CSS_LOADER_EXPORT___)));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
@@ -534,10 +663,133 @@ module.exports = __webpack_require__.p + "b985ab2c9d6d76e700cf.svg";
 
 /***/ }),
 
+/***/ 540:
+/***/ ((module) => {
+
+
+
+/* istanbul ignore next  */
+function insertStyleElement(options) {
+  var element = document.createElement("style");
+  options.setAttributes(element, options.attributes);
+  options.insert(element, options.options);
+  return element;
+}
+module.exports = insertStyleElement;
+
+/***/ }),
+
 /***/ 653:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = __webpack_require__.p + "a0f9fd9212e301eaab84.svg";
+
+/***/ }),
+
+/***/ 659:
+/***/ ((module) => {
+
+
+
+var memo = {};
+
+/* istanbul ignore next  */
+function getTarget(target) {
+  if (typeof memo[target] === "undefined") {
+    var styleTarget = document.querySelector(target);
+
+    // Special case to return head of iframe instead of iframe itself
+    if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+      try {
+        // This will throw an exception if access to iframe is blocked
+        // due to cross-origin restrictions
+        styleTarget = styleTarget.contentDocument.head;
+      } catch (e) {
+        // istanbul ignore next
+        styleTarget = null;
+      }
+    }
+    memo[target] = styleTarget;
+  }
+  return memo[target];
+}
+
+/* istanbul ignore next  */
+function insertBySelector(insert, style) {
+  var target = getTarget(insert);
+  if (!target) {
+    throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");
+  }
+  target.appendChild(style);
+}
+module.exports = insertBySelector;
+
+/***/ }),
+
+/***/ 825:
+/***/ ((module) => {
+
+
+
+/* istanbul ignore next  */
+function apply(styleElement, options, obj) {
+  var css = "";
+  if (obj.supports) {
+    css += "@supports (".concat(obj.supports, ") {");
+  }
+  if (obj.media) {
+    css += "@media ".concat(obj.media, " {");
+  }
+  var needLayer = typeof obj.layer !== "undefined";
+  if (needLayer) {
+    css += "@layer".concat(obj.layer.length > 0 ? " ".concat(obj.layer) : "", " {");
+  }
+  css += obj.css;
+  if (needLayer) {
+    css += "}";
+  }
+  if (obj.media) {
+    css += "}";
+  }
+  if (obj.supports) {
+    css += "}";
+  }
+  var sourceMap = obj.sourceMap;
+  if (sourceMap && typeof btoa !== "undefined") {
+    css += "\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))), " */");
+  }
+
+  // For old IE
+  /* istanbul ignore if  */
+  options.styleTagTransform(css, styleElement, options.options);
+}
+function removeStyleElement(styleElement) {
+  // istanbul ignore if
+  if (styleElement.parentNode === null) {
+    return false;
+  }
+  styleElement.parentNode.removeChild(styleElement);
+}
+
+/* istanbul ignore next  */
+function domAPI(options) {
+  if (typeof document === "undefined") {
+    return {
+      update: function update() {},
+      remove: function remove() {}
+    };
+  }
+  var styleElement = options.insertStyleElement(options);
+  return {
+    update: function update(obj) {
+      apply(styleElement, options, obj);
+    },
+    remove: function remove() {
+      removeStyleElement(styleElement);
+    }
+  };
+}
+module.exports = domAPI;
 
 /***/ })
 
@@ -631,11 +883,61 @@ module.exports = __webpack_require__.p + "a0f9fd9212e301eaab84.svg";
 /******/ 		// no jsonp function
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/nonce */
+/******/ 	(() => {
+/******/ 		__webpack_require__.nc = undefined;
+/******/ 	})();
+/******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 
-// EXTERNAL MODULE: ./src/style.css
+// EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js
+var injectStylesIntoStyleTag = __webpack_require__(72);
+var injectStylesIntoStyleTag_default = /*#__PURE__*/__webpack_require__.n(injectStylesIntoStyleTag);
+// EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/styleDomAPI.js
+var styleDomAPI = __webpack_require__(825);
+var styleDomAPI_default = /*#__PURE__*/__webpack_require__.n(styleDomAPI);
+// EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/insertBySelector.js
+var insertBySelector = __webpack_require__(659);
+var insertBySelector_default = /*#__PURE__*/__webpack_require__.n(insertBySelector);
+// EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js
+var setAttributesWithoutAttributes = __webpack_require__(56);
+var setAttributesWithoutAttributes_default = /*#__PURE__*/__webpack_require__.n(setAttributesWithoutAttributes);
+// EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/insertStyleElement.js
+var insertStyleElement = __webpack_require__(540);
+var insertStyleElement_default = /*#__PURE__*/__webpack_require__.n(insertStyleElement);
+// EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/styleTagTransform.js
+var styleTagTransform = __webpack_require__(113);
+var styleTagTransform_default = /*#__PURE__*/__webpack_require__.n(styleTagTransform);
+// EXTERNAL MODULE: ./node_modules/css-loader/dist/cjs.js!./src/style.css
 var style = __webpack_require__(208);
+;// ./src/style.css
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var options = {};
+
+options.styleTagTransform = (styleTagTransform_default());
+options.setAttributes = (setAttributesWithoutAttributes_default());
+options.insert = insertBySelector_default().bind(null, "head");
+options.domAPI = (styleDomAPI_default());
+options.insertStyleElement = (insertStyleElement_default());
+
+var update = injectStylesIntoStyleTag_default()(style/* default */.A, options);
+
+
+
+
+       /* harmony default export */ const src_style = (style/* default */.A && style/* default */.A.locals ? style/* default */.A.locals : undefined);
+
 ;// ./src/Project.js
 class Project {
   constructor(name, id) {
