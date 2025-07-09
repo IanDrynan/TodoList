@@ -6,6 +6,7 @@
   --main-color-3: #b8cfce;
   --main-color-4: #eaefef;
 }
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
@@ -14,6 +15,7 @@ body {
   height: 100vh;
   color: var(--main-color-4);
 }
+
 button {
   cursor: pointer;
   border: none;
@@ -24,11 +26,13 @@ button {
     filter: brightness(0.9);
     transform: translate(1px, 1px);
   }
+
   &:active {
     filter: brightness(1.1);
     transform: translate(-1px, -1px);
   }
 }
+
 #sidebar {
   padding: 2rem;
   width: 300px;
@@ -50,22 +54,22 @@ button {
     display: flex;
 
     .projectButton {
-    text-align: left;
+      text-align: left;
 
-    &::before {
-      content: ">";
-      margin-right: 1rem;
+      &::before {
+        content: ">";
+        margin-right: 1rem;
+      }
+    }
+
+    .projectDeleteButton {
+      margin: 0;
+      margin-left: auto;
+      padding: 0;
+      width: 1.5rem;
+      height: 1.5rem;
     }
   }
-  .projectDeleteButton {
-        margin: 0;
-        margin-left: auto;
-        padding: 0;
-        width: 1.5rem;
-        height: 1.5rem;
-      }
-  }
-
 }
 
 #main {
@@ -90,6 +94,7 @@ button {
         opacity: 0.5;
       }
     }
+
     .todoHeaderDiv {
       cursor: pointer;
       display: flex;
@@ -102,6 +107,7 @@ button {
         margin-right: auto;
         cursor: pointer;
       }
+
       .todoEditButton {
         background-image: url("./assets/pencil.svg");
         background-color: transparent;
@@ -109,6 +115,7 @@ button {
         height: 1.5rem;
         background-size: contain;
       }
+
       .todoDeleteButton {
         background-image: url("./assets/trashbin.svg");
         background-color: transparent;
@@ -117,12 +124,14 @@ button {
         background-size: contain;
       }
     }
+
     .todoDescription {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.2s ease-out;
     }
   }
+
   #mainBtns {
     margin-top: auto;
   }
@@ -147,26 +156,33 @@ button {
     #todoFormTitle {
       grid-area: title;
     }
+
     #todoFormDescription {
       grid-area: description;
     }
+
     #todoFormDueDate {
       grid-area: dueDate;
     }
+
     #todoFormPriority {
       grid-area: priority;
     }
+
     #todoFormProject {
       grid-area: project;
     }
+
     #todoFormSubmit {
       grid-area: submit;
     }
+
     #todoFormCancel {
       grid-area: cancel;
     }
   }
 }
+
 /*
 <div class="checkbox-wrapper-15">
   <input class="inp-cbx" id="cbx-15" type="checkbox" style="display: none;"/>

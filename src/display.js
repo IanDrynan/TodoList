@@ -1,8 +1,4 @@
-import {
-  getCurrentProject,
-  getProjectMap,
-  getInboxID,
-} from "./dataManager.js";
+import { getCurrentProject, getProjectMap, getInboxID } from "./dataManager.js";
 
 function updateDisplay() {
   const project = getCurrentProject();

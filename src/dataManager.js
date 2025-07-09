@@ -43,7 +43,7 @@ export function getData() {
           todo[1]._priority,
           todo[1]._dueDate,
           todo[1]._status,
-          todo[1]._id,
+          todo[1]._id
         );
       }
     }
@@ -51,20 +51,19 @@ export function getData() {
   setCurrentProjectToInbox();
 }
 function convertProjectMap(map) {
-  const convertedProjectMap = Array.from(map.entries()).map(([projectID, projectObj]) => {
-    const convertedTodoMap = {...projectObj};
-    convertedTodoMap._todos = Array.from(convertedTodoMap._todos.entries());
-    return [projectID, convertedTodoMap];
-  });
+  const convertedProjectMap = Array.from(map.entries()).map(
+    ([projectID, projectObj]) => {
+      const convertedTodoMap = { ...projectObj };
+      convertedTodoMap._todos = Array.from(convertedTodoMap._todos.entries());
+      return [projectID, convertedTodoMap];
+    }
+  );
   return convertedProjectMap;
 }
 function saveData() {
   console.log("saving");
   const dataToStore = convertProjectMap(projectMap);
-  localStorage.setItem(
-    "projects",
-    JSON.stringify(dataToStore)
-  );
+  localStorage.setItem("projects", JSON.stringify(dataToStore));
 }
 export function addNewProject(name, id) {
   const newProject = new Project(name, id);
